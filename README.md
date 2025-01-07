@@ -1,12 +1,12 @@
 # Тестовое задание
 
-## Инструкции по установке
+## Инструкции по развертыванию
 
 1. cd /data/datainlife/
 2. Клонируйте репозиторий: `git clone git@github.com:DjulianMentl/laravel_test.git`
 3. Откройте терминал и выполните `cd /data/datainlife/laravel_test/infra`
 4. Выполните команду: `docker-compose up -d --build`
-5. Войти в Docker-контейнер: `docker-compose exec php bash`
+5. Войти в Docker-контейнер: `docker-compose exec php-service bash`
 6. Выполнить команду `composer install`
 7. Применить миграции `php bin/console doctrine:migrations:migrate`  
 
