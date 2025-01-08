@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\DeactivateUserIfNoGroups;
 use App\Mail\GroupExpirationNotification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -37,6 +38,9 @@ class CheckUserExpirationCommand extends Command
 
                     // TODO: переделать через очередь, чтоб команда не падали при ошибке отправки email
                     Mail::to($user->email)->send(new GroupExpirationNotification($user->name, $group->name));
+
+                    // TODO: добавить логирование
+                    DeactivateUserIfNoGroups::dispatch(($user));
                 }
             });
         } catch (Exception $e) {
