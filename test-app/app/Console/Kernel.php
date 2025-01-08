@@ -12,7 +12,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        /**
+         * при такой реализации в crontab нужно запускать php /var/www/html/test-app/artisan schedule:run
+         */
+        $schedule->command('user:check_expiration')->everyTenMinutes();
+
+        /**
+         * также можно настроить выполнение раз в 10 минут команды user:check_expiration по crontab
+         * /10 * * * * cd /var/www/html/test-app && php artisan user:check_expiration >> storage/logs/checkExpiration.log 2>&1
+         */
     }
 
     /**
