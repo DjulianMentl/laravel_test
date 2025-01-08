@@ -39,12 +39,9 @@ class GroupService
         $user = User::findOrFail($userId);
         $group = Group::findOrFail($groupId);
 
-        if (!$user) {
-            throw new \Exception('User not found');
-        }
-
-        if (!$group) {
-            throw new \Exception('Group not found');
+        if (!$user->active) {
+            $user->active = true;
+            $user->save();
         }
 
         GroupUser::create([
