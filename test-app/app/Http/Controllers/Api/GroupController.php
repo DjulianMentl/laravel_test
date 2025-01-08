@@ -21,8 +21,9 @@ class GroupController extends Controller
         return new GroupResource($group);
     }
 
-    public function show(Group $group): GroupResource
+    public function show(string $id): GroupResource
     {
+        $group = Group::with('users')->findOrFail($id);
         return new GroupResource($group);
     }
 
