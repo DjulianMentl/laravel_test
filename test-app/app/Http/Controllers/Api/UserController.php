@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct(
+        private readonly UserService $userService,
+    ) {
+    }
+
     public function store(Request $request): UserResource
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'active' => 'boolean',
-        ]);
-
-        $user = User::create($validated);
+        $user = $this->userService->storeFromRequest($request);
 
         return new UserResource($user);
     }
@@ -25,18 +25,13 @@ class UserController extends Controller
     public function show(string $id): UserResource
     {
         $user = User::with('groups')->findOrFail($id);
+
         return new UserResource($user);
     }
 
     public function update(Request $request, User $user): UserResource
     {
-        $validated = $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'email|max:255|unique:users,email,' . $user->id,
-            'active' => 'boolean',
-        ]);
-
-        $user->update($validated);
+        $user = $this->userService->updateFromRequest($request, $user);
 
         return new UserResource($user);
     }
