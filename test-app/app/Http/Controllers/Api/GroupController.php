@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
+use App\Models\GroupUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -37,5 +39,23 @@ class GroupController extends Controller
         $group->update($validated);
 
         return new GroupResource($group);
+    }
+    public function addUserToGroup(string $userId, string $groupId): void
+    {
+        $user = User::findOrFail($userId);
+        $group = Group::findOrFail($groupId);
+
+        if (!$user) {
+            throw new \Exception('User not found');
+        }
+
+        if (!$group) {
+            throw new \Exception('Group not found');
+        }
+
+        GroupUser::create([
+            'user_id' => $user->id,
+            'group_id' => $group->id,
+        ]);
     }
 }

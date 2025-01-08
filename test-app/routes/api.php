@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('users', UserController::class)->only(['store', 'update', 'show']);
 Route::apiResource('groups', GroupController::class)->only(['store', 'update', 'show']);
+Route::post('groups/{group}/add-user/{user}', [GroupController::class, 'addUserToGroup']);
